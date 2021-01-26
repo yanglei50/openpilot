@@ -34,7 +34,7 @@ int set_core_affinity(int core);
 
 namespace util {
 
-inline bool starts_with(std::string s, std::string prefix) {
+inline bool starts_with(const std::string &s, const std::string &prefix) {
   return s.compare(0, prefix.size(), prefix) == 0;
 }
 
@@ -74,7 +74,7 @@ inline std::string dir_name(std::string const & path) {
   return path.substr(0, pos);
 }
 
-inline std::string readlink(std::string path) {
+inline std::string readlink(const std::string &path) {
   char buff[4096];
   ssize_t len = ::readlink(path.c_str(), buff, sizeof(buff)-1);
   if (len != -1) {
@@ -96,6 +96,12 @@ inline std::string getenv_default(const char* env_var, const char * suffix, cons
 inline void sleep_for(const int milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
+
+inline bool file_exists(const std::string& fn) {
+  std::ifstream f(fn);
+  return f.good();
+}
+
 }
 
 class ExitHandler {

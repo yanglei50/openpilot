@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include <pthread.h>
+#include <vector>
 #include <OMX_Component.h>
 
 extern "C" {
@@ -13,7 +14,6 @@ extern "C" {
 
 #include "encoder.h"
 #include "common/cqueue.h"
-#include "visionipc.h"
 
 // OmxEncoder, lossey codec using hardware hevc
 class OmxEncoder : public VideoEncoder {
@@ -22,7 +22,7 @@ public:
   ~OmxEncoder();
   int encode_frame(const uint8_t *y_ptr, const uint8_t *u_ptr, const uint8_t *v_ptr,
                    int in_width, int in_height,
-                   int *frame_segment, VisionIpcBufExtra *extra);
+                   int *frame_segment, uint64_t ts);
   void encoder_open(const char* path, int segment);
   void encoder_close();
 
@@ -60,11 +60,8 @@ private:
 
   OMX_HANDLETYPE handle;
 
-  int num_in_bufs;
-  OMX_BUFFERHEADERTYPE** in_buf_headers;
-
-  int num_out_bufs;
-  OMX_BUFFERHEADERTYPE** out_buf_headers;
+  std::vector<OMX_BUFFERHEADERTYPE *> in_buf_headers;
+  std::vector<OMX_BUFFERHEADERTYPE *> out_buf_headers;
 
   uint64_t last_t;
 
