@@ -1054,11 +1054,10 @@ static void set_camera_exposure(CameraState *s, float grey_frac) {
 
   struct i2c_random_wr_payload exp_reg_array[] = {{0x3366, AG}, // analog gain
                                                   {0x3362, (uint16_t)(s->dc_gain_enabled?0x1:0x0)}, // DC_GAIN
-                                                  {0x305A, 0x00D8}, // red gain
-                                                  {0x3058, 0x011B}, // blue gain
+                                                  {0x305A, 0x009F}, // red gain
+                                                  {0x3058, 0x0090}, // blue gain
                                                   {0x3056, 0x009A}, // g1 gain
                                                   {0x305C, 0x009A}, // g2 gain
-                                                  {0x3060, 0xAAAA},
                                                   {0x3012, (uint16_t)s->exposure_time}}; // integ time
                                                   //{0x301A, 0x091C}}; // reset
   sensors_i2c(s, exp_reg_array, sizeof(exp_reg_array)/sizeof(struct i2c_random_wr_payload),
